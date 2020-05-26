@@ -1,6 +1,7 @@
 package com.uniovi.controllers;
 
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,7 @@ public class UsersController {
 	private RolesService rolesService;
 	@Autowired
 	private LoggerService loggerService;
+	
 
 	@RequestMapping(value = "/user/add")
 	public String getUser(Model model) {
@@ -66,7 +68,7 @@ public class UsersController {
 		if (error != null) {
 			model.addAttribute("error", error);
 		}
-		
+
 		return "login";
 	}
 
@@ -84,6 +86,14 @@ public class UsersController {
 		model.addAttribute("activeUser", usersService.getCurrentUser());
 		model.addAttribute("page", users);
 		return "user/list";
+	}
+	
+	@RequestMapping("/user/favoritos")
+	public String getFavorito(Model model, @PathVariable Long id, Principal principal) {
+		User user = usersService.getUserByEmail(principal.getName());
+		ArrayList<User> users = user.getListaDeFavs();
+		model.addAttribute("usersFavs", users);
+		return "user/favoritos";
 	}
 
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
@@ -122,6 +132,18 @@ public class UsersController {
 		loggerService.adminDeleteUser(principal.getName(), userDelete.getEmail());
 		usersService.deleteUser(id);
 		return "redirect:/user/list";
-	} 
+	}
+
+	@RequestMapping(value = "/friend/anadirFav/{id}", method = RequestMethod.POST)
+	public String anadirFavorito(Model model, @PathVariable Long id, Principal principal) {
+		User user = usersService.getUserByEmail(principal.getName());
+		User userFav = usersService.getUser(id);
+		if(!user.getListaDeFavs().contains(userFav)) {
+			user.addFav(userFav);
+		}
+		return "/user/favs";
+	}
+	
+	
 
 }

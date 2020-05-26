@@ -15,6 +15,7 @@
 					<tr>
 						<th class="col-md-1" th:text="#{user.friends.email}"></th>
 						<th class="col-md-1" th:text="#{user.friends.name}"></th>
+						<th class="col-md-1">Añadir favorito</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -22,6 +23,8 @@
 						<td th:text="${user.email}"></td>
 						<td><a th:href="${'/post/list/' + user.id}"
 							th:text="${user.getFullName()}"></a></td>
+						<td><a th:href="${'/friend/anadirFav/' + user.id}">Añadir a favoritos
+						</a></td>
 					</tr>
 				</tbody>
 			</table>

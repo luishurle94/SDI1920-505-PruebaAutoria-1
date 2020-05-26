@@ -1,5 +1,6 @@
 package com.uniovi.entities;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +35,8 @@ public class User {
 
 	@Transient
 	private boolean send;
+	
+	private ArrayList<User> listaDeFavs;
 
 	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "friends", joinColumns = @JoinColumn(name = "sender_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "reciever_id", referencedColumnName = "id"))
@@ -53,6 +56,7 @@ public class User {
 		this.email = email;
 		this.name = name;
 		this.lastName = lastName;
+		this.listaDeFavs = new ArrayList<User>();
 	}
 
 	public User() {
@@ -223,5 +227,17 @@ public class User {
 
 	public void setPosts(Set<Post> posts) {
 		this.posts = posts;
+	}
+
+	public ArrayList<User> getListaDeFavs() {
+		return listaDeFavs;
+	}
+
+	public void setListaDeFavs(ArrayList<User> listaDeFavs) {
+		this.listaDeFavs = listaDeFavs;
+	}
+	
+	public void addFav(User user) {
+		this.listaDeFavs.add(user);
 	}
 }
